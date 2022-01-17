@@ -1,5 +1,5 @@
 # ~rnaR/wohlstandShinyDashboard
-# Version 3 2022-01-02
+# Version 3 2022-01-14
 ## server.R ##
 library(shiny)
 library(shinydashboard)
@@ -7,6 +7,7 @@ library(shinydashboardPlus)
 library(shinyWidgets)
 library(glue)
 library(tidyverse)
+library(scales)
 library(ineq)
 #setwd("~/rnaR/wohlstandShinyDashboard")
 message(glue("server start for all sessions, Time: {Sys.time()}"))
@@ -213,7 +214,7 @@ server <- function(input, output, session) {
   }
   
   fmtBetrag <- function(betrag) {
-    return(paste(fmtZahl(betrag), "€"))
+    return(paste(fmtZahl(betrag), "$"))
   }
   
   fmtProz <- function(betrag) {
@@ -260,12 +261,12 @@ server <- function(input, output, session) {
   fTabStat <- function(jahr) {
     tStat <- c(
       "Laufendes Jahr Nr.:" = rv$lfdJahr,
-      "Gesamtvermögen Jahresanfang:" = fmtBetrag(rv$gesamtVermoegenAnf),
-      "Gesamtvermögen Jahresende:" = fmtBetrag(rv$gesamtVermoegenEnd),
+      "Gesamtvermögen zum Jahresanfang:" = fmtBetrag(rv$gesamtVermoegenAnf),
+      "Gesamtvermögen zum Jahresende:" = fmtBetrag(rv$gesamtVermoegenEnd),
       "Gesamtvermögen nach Umverteilung:" = fmtBetrag(rv$gesamtVermoegenUmv),
-      "Größtes Vermögen Jahresende:" = fmtBetrag(max(rv$lastWeekVermoeg)),
+      "Größtes Vermögen zum Jahresende:" = fmtBetrag(max(rv$lastWeekVermoeg)),
       "Größtes Vermögen nach Umverteilung:" = fmtBetrag(max(rv$nachSteuern)),
-      "Kleinstes Vermögen Jahresende:" = fmtBetrag(min(rv$lastWeekVermoeg)),
+      "Kleinstes Vermögen zum Jahresende:" = fmtBetrag(min(rv$lastWeekVermoeg)),
       "Kleinstes Vermögen nach Umverteilung:" = fmtBetrag(min(rv$nachSteuern))
     )
     return (tStat)
@@ -284,6 +285,7 @@ server <- function(input, output, session) {
   #### end of function defs
 
   # scalars per session
+  #  startKap <- 1.0
   lfdJahr <- 0
   gesamtVermoegenAnf <- 0.0
   gesamtVermoegenEnd <- 0.0
@@ -379,7 +381,7 @@ server <- function(input, output, session) {
   )
   
   message(glue("start running inside server"))
-  newStart(startKap, randNormMean, randNormSd, randAddNormMean, randAddNormSd)
+  newStart(startKap, randNormMean, randNormSd, 0.0, 0.0) # erster Start nur mult wachstum
   setRv()
 ### end of statements initializing server session
   
@@ -464,31 +466,45 @@ observeEvent(input$sliderSteuerprozent, {
   output$outHistAnf <- renderPlot({
     ggplot(mapping=aes(x=rv$firstWeekVermoeg))+
       geom_histogram(bins=10, colour="red", fill="blue", lwd=0.2)+
-      labs(y = "Anzahl Personen in VermögensKlasse", x = "Vermögen", 
-           title = "Histogram der Vermögen zum Jahresbeginn")+ 
+      scale_x_continuous(labels = scales::dollar) +
+      labs(y = "Anzahl (rot) der Personen in VermögensKlasse", x = "Vermögenshöhe pro Klasse", 
+           title = "Histogramm der Vermögen zum Jahresbeginn")+ 
       lims(y = c(0,100))+
       stat_bin(bins=10, geom="text", colour="red", size=6.0,
-               aes(label=..count..), position=position_stack(vjust=1.1) )
+               aes(label=..count..), vjust=-0.2 )
   })
   
   output$outHistEnd <- renderPlot({
     ggplot(mapping=aes(x=rv$lastWeekVermoeg))+
       geom_histogram(bins=10, colour="red", fill="blue", lwd=0.2)+
-      labs(y = "Anzahl Personen in VermögensKlasse", x = "Vermögen", 
-           title = "Histogram der Vermögen zum Jahresende ohne Umverteilung")+ 
+      scale_x_continuous(labels = scales::dollar) +
+      labs(y = "Anzahl (rot) der Personen in VermögensKlasse", x = "Vermögenshöhe pro Klasse", 
+           title = "Histogramm der Vermögen zum Jahresende ohne Umverteilung")+ 
       lims(y = c(0,100))+
       stat_bin(bins=10, geom="text", colour="red", size=6.0,
-        aes(label=..count..), position=position_stack(vjust=1.1) )
+        aes(label=..count..), vjust=-0.2 )
+  })
+  
+  output$outHistEnd2 <- renderPlot({
+    ggplot(mapping=aes(x=rv$lastWeekVermoeg))+
+      geom_histogram(bins=10, colour="red", fill="blue", lwd=0.2)+
+      scale_x_continuous(labels = scales::dollar) +
+      labs(y = "Anzahl (rot) der Personen in VermögensKlasse", x = "Vermögenshöhe pro Klasse", 
+           title = "Vermögen zum Jahresende")+ 
+      lims(y = c(0,100))+
+      stat_bin(bins=10, geom="text", colour="red", size=6.0,
+               aes(label=..count..), vjust=-0.2 )
   })
   
   output$outHistUmv <- renderPlot({
     ggplot(mapping=aes(x=rv$nachSteuern))+
       geom_histogram(bins=10, colour="red", fill="blue", lwd=0.2)+
-      labs(y = "Anzahl Personen in VermögensKlasse", x = "Vermögen", 
-           title = "Histogram der Vermögen nach Umverteilung")+ 
+      scale_x_continuous(labels = scales::dollar) +
+      labs(y = "Anzahl (rot) der Personen in VermögensKlasse", x = "Vermögenshöhe pro Klasse", 
+           title = "Histogramm der Vermögen nach Umverteilung")+ 
       lims(y = c(0,100))+
       stat_bin(bins=10, geom="text", colour="red", size=6.0,
-               aes(label=..count..), position=position_stack(vjust=1.1) )
+               aes(label=..count..), vjust=-0.2 )
   })
   
   output$outPlotVerlauf <- renderPlot({
@@ -498,7 +514,7 @@ observeEvent(input$sliderSteuerprozent, {
       geom_line(aes(y = weekMean, color = "3")) +
       geom_line(aes(y = weekMin, color = "4")) +
       #  coord_trans(y = "log10")+
-      scale_y_log10() +
+      scale_y_log10(labels = scales::dollar) +
       labs(y = "Vermögen (log10)", x = "Wochen", title = "Wochenverlauf Minimum, Median, Mittelwert, Maximum der Vermögen", ) +
       scale_color_manual(
         values = c("firebrick", "darkgreen", "red", "green"),
@@ -511,7 +527,8 @@ observeEvent(input$sliderSteuerprozent, {
   output$outPlotVerlaufGes <- renderPlot({
     ggplot(data = rv$s, aes(x = 1:anzWeek)) +
       geom_line(aes(y = weekSum, color = "1")) +
-      labs(y = "Vermögen", x = "Wochen", title = "Wochenverlauf GesamtVermögen aller Personen") +
+      scale_y_log10(labels = scales::dollar) +
+      labs(y = "Vermögen (log10)", x = "Wochen", title = "Wochenverlauf GesamtVermögen aller Personen") +
       scale_color_manual(
         values = c("firebrick", "darkgreen", "red", "green"),
         name = "Legende:",
