@@ -1,5 +1,5 @@
-# ~rnaR/wohlstand 
-# Version 3 2022-01-14
+# ~rnaR/wohlstandShinyDashboard
+# Version 4 2022-02-08
 ## ui.R ##
 library(shiny)
 library(shinydashboard)
@@ -21,6 +21,7 @@ ui <- dashboardPage(
       menuItem("Funktionsweise", tabName = "funktTab"),
       menuItem("Ergodizität", tabName = "ergoTab"),
       menuItem("Parameter", tabName = "parameterTab"),
+      menuItem("Impressum", tabName = "impressumTab"),
       br(),br(),"Klicke auf diesen orangen Button",
       br(),"um ein weiteres Jahr zu simulieren:",
       actionButton("naechstesJahr", "weiteres Jahr",
@@ -48,12 +49,12 @@ ui <- dashboardPage(
               tags$li("Du probierst aus, was wir dagegen unternehmen könnten,"), 
               tags$li("Du verstehst die zugrundeliegenden Ursachen und warum das schwer zu akzeptieren ist.")
             ),
-            "In dieser Simulation wirst du beobachten, wie 100 Personen ein Jahr erleben. Sie beginnen alle mit gleichem Vermögen. Jede Woche verändert sich ihr Vermögen durch zufällig erfolgreiche Geldgeschäfte: sie erhalten Zinsen für ihr Sparguthaben, investieren in Aktien oder zahlen Kredite zurück. Keiner wendet irgendwelche unredlichen Tricks an. Im Unterschied zur Realität haben hier alle die gleichen Chancen. Einige haben eben mehr Glück, manche weniger. Aber es passiert Überraschendes.",
+            "In dieser Simulation wirst du beobachten, wie 1000 Personen ein Jahr erleben. Sie beginnen alle mit gleichem Vermögen. Jede Woche verändert sich ihr Vermögen durch zufällig erfolgreiche Geldgeschäfte: sie erhalten Zinsen für ihr Sparguthaben, investieren in Aktien oder zahlen Kredite zurück. Keiner wendet irgendwelche unredlichen Tricks an. Im Unterschied zur Realität haben hier alle die gleichen Chancen. Einige haben eben mehr Glück, manche weniger. Aber es passiert Überraschendes.",
             br(),"In drei Schritten kannst du Näheres erfahren, allerdings mit steigendem Aufwand:", 
             tags$ol(
-              tags$li(tags$b("Einfach:"),em(" Dauer nur 2 Minuten.")," Intuitiv vermutest du, dass sich die Vermögen gerecht verteilen. Überprüfe deine Annahme: Rechts siehst du ein Histogramm. Es dokumentiert, wieviele der 100 Personen sich nach einem Jahr in welcher Vermögensklasse befinden. Der linkeste Balken und die rote Zahl darüber zeigt an, wieviele Personen sich in der ärmsten Klasse befinden, der rechteste Balken zeigt die Anzahl der Personen, die zur reichsten Klasse gehören. Vergleiche die Zahl der Ärmsten mit den Reichsten. Was fällt dir auf? Hättest du diese Vermögensverteilung erwartet? Vielleicht war das ein Zufall. Drücke links unten auf den grauen Button ", em("Neustart"), " und simuliere ein anderes Jahr. Hat sich die Verteilung wesentlich verändert? Hättest du gerechtere Verteilungen erwartet? Du kannst es beliebig oft versuchen."), 
+              tags$li(tags$b("Einfach:"),em(" Dauer nur 2 Minuten.")," Intuitiv vermutest du, dass sich die Vermögen gerecht verteilen. Überprüfe deine Annahme: Rechts siehst du ein Histogramm. Es dokumentiert, wieviele der 1000 Personen sich nach einem Jahr in welcher Vermögensklasse befinden. Der linkeste Balken und die rote Zahl darüber zeigt an, wieviele Personen sich in der ärmsten Klasse befinden, der rechteste Balken zeigt die Anzahl der Personen, die zur reichsten Klasse gehören. Vergleiche die Zahl der Ärmsten mit den Reichsten. Was fällt dir auf? Hättest du diese Vermögensverteilung erwartet? Vielleicht war das ein Zufall. Drücke links unten auf den grauen Button ", em("Neustart"), " und simuliere ein anderes Jahr. Hat sich die Verteilung wesentlich verändert? Hättest du gerechtere Verteilungen erwartet? Du kannst es beliebig oft versuchen."), 
               tags$li(tags$b("Fortgeschritten:"),em(" Dauer ca. 15 Minuten.")," Wenn du erkannt hast, dass sich Vermögen automatisch ungleich entwickeln, möchtest du vielleicht ausprobieren, wie du diesen Trend mildern kannst. Eine Möglichkeit wäre Umverteilung durch Besteuerung hoher Vermögen. Lies dir dazu die Menuseite ", em("Anleitung"), " durch und probiere es selber im Menu ", em("Simulation"), " aus. Beurteile die entstehenden Vermögensunterschiede im Menu ", em("Ungleichheit")), 
-              tags$li(tags$b("Meisterklasse:"),em(" Dauer etwa 30 Minuten.")," Für uns ist es schwer zu verstehen, warum Ungleichheit automatisch entsteht. Denn das hier Erlebte spricht gegen unsere Intuition, gegen unser Verständnis von Durchschnittsbildung und gegen traditionelle Wirtschaftstheorien. Wenn dich das irritiert und du etwas mehr erfahren möchtest, dann schau dir die Menuseite ", em("Ergodizität"), " näher an und experimentiere mit exponentiellem und additivem Wachstum mit unterschiedlichen Parametern im Menu ", em("Parameter."))
+              tags$li(tags$b("Professional:"),em(" Dauer etwa 30 Minuten.")," Für uns ist es schwer zu verstehen, warum Ungleichheit automatisch entsteht. Denn das hier Erlebte spricht gegen unsere Intuition, gegen unser Verständnis von Durchschnittsbildung und gegen traditionelle Wirtschaftstheorien. Wenn dich das irritiert und du etwas mehr erfahren möchtest, dann schau dir die Menuseite ", em("Ergodizität"), " näher an und experimentiere mit exponentiellem und additivem Wachstum mit unterschiedlichen Parametern im Menu ", em("Parameter."))
             ),
             strong("Wie funktioniert das Ganze?"),
             "Wenn du ",strong("links oben das Symbol mit den drei weißen Balken"), " anklickst, öffnet oder schließt sich links das Menu.",
@@ -66,7 +67,8 @@ ui <- dashboardPage(
               tags$li(em("Jahresverlauf"), " veranschaulicht, wie sich das Gesamtvermögen und die Extremwerte der einzelnen Vermögen im Jahresverlauf entwickeln."),
               tags$li(em("Funktionsweise"), " erklärt, wie das Simulationsmodell im Detail funktioniert."),
               tags$li(em("Ergodizität"), " beschreibt die Auswirkungen der zugrunde liegenden mathematischen Eigenschaft."),
-              tags$li(em("Parameter"), " hier kannst du einige Parameter dieser Simulation selbst verändern.")
+              tags$li(em("Parameter"), " hier kannst du einige Parameter dieser Simulation selbst verändern."),
+              tags$li(em("Impressum"), " hier findest du das Impressum, einen Link zu einem passenden Lied und ein Märchen als analoge Einführung.")
             ),
             "Unter dem Menu findest du 2 Buttons:",
             tags$ul(
@@ -77,7 +79,7 @@ ui <- dashboardPage(
           box(
             title = "Tipp",
             width = 4,
-            "Entscheide, wieviel Zeit du investieren möchtest, und führe dann einen oder mehr von den drei Schritten 'Einfach' - 'Meisterklasse' links durch. Du kannst nichts ruinieren - experimentiere ganz unverbindlich und mache dir dein eigenes Bild!"
+            "Entscheide, wieviel Zeit du investieren möchtest, und führe dann einen oder mehr von den drei Schritten 'Einfach' - 'Professional' links durch. Du kannst nichts ruinieren - experimentiere ganz unverbindlich und mache dir dein eigenes Bild!"
           ),
           box(
             title = "Histogramm Verteilung der Vermögen",
@@ -244,13 +246,13 @@ tabItem(tabName = "funktTab",
             title = strong("Funktionsweise"),
             width=9,
             #                  h2("Wie funktioniert dieses Modell?" ),
-            "Beim Neustart erhalten zum Jahresbeginn alle 100 Personen das gleiche Startvermögen und verändern es jede Woche durch finanzielle Transaktionen.",
+            "Beim Neustart erhalten zum Jahresbeginn alle 1000 Personen das gleiche Startvermögen und verändern es jede Woche durch finanzielle Transaktionen.",
             br(), "Wie wird jede einzelne Transaktion simuliert? Unser Wirtschaftsleben ist stark durch exponentielles Wachstum bestimmt: für kapitalorientierte Transaktionen gilt: ",
             br(), code("neues Vermögen = altes Vermögen * multiplikativer Faktor"), ". In der Realität ist der multiplikative Faktor ein Zinsgewinn, Mietertrag oder Investitionsgewinn, mit dem das alte Vermögen multipliziert wird. Jedenfalls hängt hier die Höhe des neuen Vermögens stark von der Höhe des alten Vermögens ab. Im Modell verwenden wir als multiplikativen Faktor normalverteilte Zufallszahlen mit einem voreingestellten Mittelwert = 1,03 und der Standardabweichung = 0,2.",
             br(), "Zusätzlich gibt es auch ein additives Wachstum, das durch Erwerbsarbeit, Pensionen oder Mietzahlungen der kleinen Leute entsteht. Dieses Wachstum hängt nicht von der aktuellen Vermögenshöhe ab. Hier gilt: ",code("neues Vermögen = altes Vermögen + additiver Faktor"), 
             ". Im Modell verwenden wir als additiven Faktor normalverteilte Zufallszahlen mit einem voreingestellten Mittelwert = 0,03 und der Standardabweichung = 0,2.",
             br(), "Mit diesen Werten stellen wir ein geringfügig positives, aber variierendes  Wachstum ein. Diese Parameter wie auch das Startvermögen kannst du mit den entsprechenden Schiebereglern auf der Menuseite ", em("Parameter"), " verändern. Dort kannst du auch entscheiden, ob du exponentielles oder additives Wachstum oder beide Wachstumsarten nebeneinander simulieren möchtest.",
-            br(), "So simulieren wir mit den so parametrisierten Zufallszahlen für jede Woche des aktuellen Jahres die Vermögensveränderung für jede der 100 Personen. Logischer Weise sind dann die Vermögen zum Jahresende unterschiedlich hoch. Das ist nicht verwunderlich, manche haben eben mehr Glück bei ihren finanziellen Entscheidungen. Daher erwarten wir, dass sich zum Jahresende die Personen in unterschiedlichen Vermögensklassen befinden.",
+            br(), "So simulieren wir mit den so parametrisierten Zufallszahlen für jede Woche des aktuellen Jahres die Vermögensveränderung für jede der 1000 Personen. Logischer Weise sind dann die Vermögen zum Jahresende unterschiedlich hoch. Das ist nicht verwunderlich, manche haben eben mehr Glück bei ihren finanziellen Entscheidungen. Daher erwarten wir, dass sich zum Jahresende die Personen in unterschiedlichen Vermögensklassen befinden.",
             "So müssten wir auf der Menuseite ", em("Simulation"), " ausgewogene Histogramme sehen mit etwa gleich besetzten Vermögensklassen. Erstaunlicherweise beobachten wir aber eine schiefe ungleiche Verteilung, wenn - wie in der Realität - exponentielles Wachstum im Spiel ist: ",
             br(), strong("Wenige Personen sind reich geworden und die meisten befinden sich in der Klasse mit den kleinsten Vermögen."),
             br(), br(), "Das verdeutlicht auch die Menuseite ", em("Ungleichheit: "),
@@ -314,28 +316,20 @@ tabItem(tabName = "ergoTab",
             br(), a(href = "https://drive.google.com/file/d/1f1J-EhkkB49vkey1L_F3ICk0EwYErmzn/view?usp=sharing", "https://drive.google.com/file/d/1f1J-EhkkB49vkey1L_F3ICk0EwYErmzn/view?usp=sharing"),
             br(), br(), "Kapital und Ideologie, Vortrag Thomas Piketty, AK Wien, 2021",
             br(), a(href = "https://wien.arbeiterkammer.at/service/veranstaltungen/rueckblicke/AK_Piketty_WEB.pdf", "https://wien.arbeiterkammer.at/service/veranstaltungen/rueckblicke/AK_Piketty_WEB.pdf"),
+            br(), br(), "What is ergodicity?, Lars P. Syll, 2016",
+            br(), a(href = "https://larspsyll.wordpress.com/2016/11/23/what-is-ergodicity-2/", "https://larspsyll.wordpress.com/2016/11/23/what-is-ergodicity-2/", target="_blank"),
             br(), br(), "Ergodicity Economics, Ole Peters, Alex Adamou, 2018",
             br(), a(href = "https://ergodicityeconomics.files.wordpress.com/2018/06/ergodicity_economics.pdf", "https://ergodicityeconomics.files.wordpress.com/2018/06/ergodicity_economics.pdf"),
             br(), br(), "Democratic domestic product, Ole Peters, 2020",
             br(), a(href = "https://ergodicityeconomics.com/2020/02/26/democratic-domestic-product/", "https://ergodicityeconomics.com/2020/02/26/democratic-domestic-product/"),
+            br(), br(), "Wealth Inequality and the Ergodic Hypothesis, Yonatan Berman, Ole Peters, Alexander Adamou, 2020",
+            br(), a(href = "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2794830", "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2794830", target="_blank"),
             br(), br(), "Ergodizität, Wikipedia, 2021",
             br(), a(href = "https://de.wikipedia.org/wiki/Ergodizit%C3%A4t", "https://de.wikipedia.org/wiki/Ergodizit%C3%A4t"),
             br(), br(), "Fermi–Pasta–Ulam–Tsingou problem, Wikiwand, 2021",
             br(), a(href = "https://www.wikiwand.com/en/Fermi%E2%80%93Pasta%E2%80%93Ulam%E2%80%93Tsingou_problem", "https://www.wikiwand.com/en/Fermi%E2%80%93Pasta%E2%80%93Ulam%E2%80%93Tsingou_problem"),
             br(), br(), "The Triumph of Injustice, Tax policy simulator, Gabriel Zucman, 2019",
-            br(), a(href = "https://taxjusticenow.org/", "https://taxjusticenow.org/"),
-            hr(),h4("Impressum"),
-            "This website is provided by:",
-            br(), "Information Design Institute, 120 Hoetzendorfstrasse,",
-            "A-2231 Strasshof, Austria / Europe,",
-            br(), "Tel.: +43 650 2287 001, nagler@idi.co.at,",
-            a(href = "https://www.idi.co.at/", "https://www.idi.co.at/"),
-            br(), "Managing director and responsible for content: Dipl.-Ing. Dr. Rupert Nagler, Dr. Nagler KG,",
-            br(), "Line of Business: Consulting, Register number: 174660 d, UID: ATU45617202",
-            br(), "This website may contain links to other sites. We are not responsible for linked content.",
-            br(), "Developed in Rstudio V4.0+ with library 'shinydashboard'.",
-            br(), "Open Sourcecode public available at:",
-            a(href = "https://github.com/rnagler/Wohlstand/", "https://github.com/rnagler/Wohlstand/")
+            br(), a(href = "https://taxjusticenow.org/", "https://taxjusticenow.org/")
           )
         )),
 tabItem(tabName = "parameterTab",
@@ -377,6 +371,14 @@ tabItem(tabName = "parameterTab",
                    selected = "mult")
                 ),
                 box(
+                  title = "Leverage (Hebel)",
+                  width = 6,
+                  helpText(
+                    "Hier kannst du einstellen, welchen Prozentsatz ihres Vermögens Personen bei allen ihren Transaktionen einsetzen. Standardmäßig eingestellt sind 100%. Mehr als 100% würde bedeuten, zusätzlichen Kredit aufzunehmen. Unter 0% wäre ein Short, bedeutet die Rolle der Bank zu übernehmen."
+                  ),
+                  sliderInput("sliderLeverage", "Leverage:", -100, 200, 100)
+                ),
+                box(
                   title = "Startvermögen",
                   width = 6,
                   helpText(
@@ -384,7 +386,58 @@ tabItem(tabName = "parameterTab",
                   ),
                   sliderInput("sliderStartVermoeg", "Startvermögen:", 0.1, 100, 1)
               )
-              ))
+              )),
+tabItem(tabName = "impressumTab",
+        fluidRow(
+          box(
+            title = "Impressum:",
+            width = 4,
+            "This website is provided by:",
+            br(), "Information Design Institute, 120 Hoetzendorfstrasse,",
+            "A-2231 Strasshof, Austria / Europe,",
+            br(), "Tel.: +43 650 2287 001, nagler@idi.co.at,",
+            a(href = "https://www.idi.co.at/", "https://www.idi.co.at/", target="_blank"),
+            br(), br(), "Managing director and responsible for content: Dipl.-Ing. Dr. Rupert Nagler, Dr. Nagler KG,",
+            br(), "Line of Business: Consulting, Register number: 174660 d, UID: ATU45617202",
+            br(), br(), "This website may contain links to other sites. We are not responsible for linked content.",
+            br(), br(), "Developed in Rstudio V4.0+ with library 'shinydashboard'.",
+            br(), "Open Sourcecode public available at:",
+            a(href = "https://github.com/rnagler/prosperity/", "https://github.com/rnagler/prosperity/", target="_blank"),
+            hr(),
+            br(), h4("Netter Song, zur Einstimmung ins Thema:"),
+            "Everybody Knows, Leonard Cohen, 1988 (to play while viewing this website)",
+            br(), a(href = "https://www.youtube.com/watch?v=Lin-a2lTelg", "https://www.youtube.com/watch?v=Lin-a2lTelg", target="_blank"),
+            br(), br(), "Everybody knows that the dice are loaded",
+            br(), "    Everybody rolls with their fingers crossed",
+            br(), "    Everybody knows the war is over",
+            br(), "    Everybody knows the good guys lost",
+            br(), "    Everybody knows the fight was fixed",
+            br(), "    The poor stay poor, the rich get rich",
+            br(), "    That's how it goes",
+            br(), "    Everybody knows..."
+          ),
+          box(
+            title = "Märchen: Die Insel der Seeligen, eine einfache analoge Einstimmung zur Umverteilung",
+            width = 8,
+            "Es war einmal ein Reisender, der segelte durch unbekannte gefährliche Meere. In einem schrecklichen Unwetter kentert sein Boot. Er hat Glück und wird total erschöpft an den Strand der Insel der Seeligen gespült.",
+            br(), "Dort leben 1000 Insulaner in perfektem Frieden. Alle sind auffallend glücklich und zufrieden. Überaus hilfsbereit nehmen sie den Gestrandeten bei sich auf. Als er wieder zu Kräften gekommen ist erzählen ihm ihre Geschichte:",
+            br(), "Sie beginnen alle mit dem gleichen Vermögen und lassen ihr Geld arbeiten. Sie investieren es in die wunderschöne Landschaft, bauen auf fruchtbaren Böden herrliche Früchte an und züchten kräftige Tiere, die sie an ihre Mitbewohner verkaufen. Manche legen ihr Geld auf Sparbücher mit prächtigen Zinsen. ",
+            "Auf dieser Insel der Seeligen möchte keiner den anderen übervorteilen oder gar betrügen.",
+            br(), "Aber so gerecht und ehrlich sie auch zueinander sind, immer wieder passiert es, dass ganz wenige von ihnen viel reicher werden und alle anderen fast nichts mehr haben. Gegen diesen unerklärlichen Verlauf haben sie aber eine einfache Lösung gefunden:",
+            br(), "Am Ende eines Jahres werfen sie einen grossen Teil aller Vermögen auf einen Haufen und verteilen diesen wieder gerecht an alle. Das nennen sie 'Umverteilung'. Der Gestrandete wundert sich über diesen ungewöhnlichen Brauch und fragt, wie sie auf diese seltsame Idee gekommen sind.",
+            br(), "Sie erklären, dass in grauer Vorzeit ein Prophet bei ihnen gelandet war und ihnen dieses Vorgehen als für ihren inneren Frieden enorm wichtig empfohlen hat. Da erinnert sich der Gestrandete dunkel, dass er in der Schule ähnliches gelernt hatte: in vielen alten Kulturen war es üblich gewesen, entstandene Ungleichheit regelmässig auszugleichen, Namen wie 'Symposion' oder 'Jubileum' tauchen in seinem Gedächtnis auf.",
+            br(), "Und wirklich erlebt unser Gestrandeter den Frieden, die Ruhe und Ausgeglichenheit der Inselbewohner als Beweis für die mächtige Wirksamkeit dieser seltsamen Umverteilung. Er denkt: 'Das ist ja wirklich wie auf einer Insel der Seeligen hier, ganz anders als in meinem Heimatland, wo Gier, Hektik und Mißgunst herschen.'",
+            "Falls er durch glückliche Fügung jemals wieder in sein Heimatland zurückkehren könnte, dann würde er seinen Volksvertretern unbedingt eine ähnliche Vorgangsweise empfehlen.",
+            br(), "Nach einigen glücklichen Jahren, die er noch auf der Insel der Seeligen verbringen darf, erscheint eines Tages ein silbernes Boot am Horizont, das ihn schließlich an Bord nimmt und nach langer Fahrt in sein Heimatland zurück bringt.",
+            br(), "Einerseits ist er jetzt froh, wieder zu Hause zu sein, andereseits ist er entsetzt, wie sich die Lage in seinem Land verschlechtert hat: Viele Leute sind völlig verarmt, auch seine Brüder, Schwestern und Freunde. Er wundert sich auch über hohe Mauern mit vielen Wächtern an Orten, mit denen sich wenige Reiche aus Angst vor den Armen schützen wollen und die vielen schwer bewaffneten Polizisten, die ängstlich die jammernden Armen von Verzweiflungstaten abhalten müssen.",
+            br(), "So sucht er um Audienz bei seinen Volksvertretern an. Als er endlich vorgelassen wird, berichtet er ihnen über seine Erlebnisse auf der Insel der Seeligen und schlägt ihnen diese regelmäßige Umverteilung zur Wiedererlangung des inneren Friedens vor. Doch da brechen die Volksvertreter in ein verzweifeltes Lachen aus.",
+            "Sie sagen, dass so etwas bei ihnen gänzlich unmöglich sei. Das von ihnen vertretene Volk bewundere die Reichen und verehre sie besonders intensiv. Viele Arme glaubten in ihrer Verblendung, Vermögen sei sakrosankt. Daher dürfe man niemandem etwas wegnehmen. So sehr wünschen auch die Armen, den Reichen ähnlich zu sein, dass sie jegliche Umverteilung als undenkbar und sogar sündhaft ablehnen.",
+            br(), "Dabei geraten immer mehr Menschen in bittere Armut. Manche von diesen Unglücklichen versuchen mit Gewalt, anderen ihr Eigentum zu entreissen. Leider sind das meist ähnlich Arme wie sie selbst, da die Reichen in ihren sicheren Schlössern hinter den hohen Mauern für sie unerreichbar sind. Aber die Reichen werden immer gieriger. Sie versuchen durch unredliche Machenschaften, noch mehr Vermögen anzuhäufen.",
+            "Sie verlangen von den Armen immer höhere Mieten und Zinsen, zahlen immer geringere Löhne, bedrohen manche Beamte, um noch mehr Vorteile zu erlangen. Mächtige Reiche bestechen sogar Volksvertreter diese Gesetze zu beschließen, die es ihnen erlauben, die Armen noch mehr auszubeuten.",
+            br(), "Den Reichen gelingt es immer mehr, Vermögen als heilig und die Ungleichheit als naturgegeben und von Gott gewollt hinzustellen. Daher traut sich kein  Volksvertreter, mutig geeignete Naßnahmen gegen die immer stärker wachsende Ungleichheit zu ergreifen.",
+            br(), "Und so kommt es schließlich zu einem fürchterlichen Bürgerkrieg, bei dem alle Reiche und viele Arme ihr Leben verlieren. Und wenn die wenigen Überlebenden nicht auch schon gestorben sind, dann leben sie heute noch - aber nur mit regelmäßiger Umverteilung wie auf der Insel der Seeligen."
+          )
+        ))
     )
   ),
 footer = dashboardFooter(left = "Rupert Nagler",

@@ -1,5 +1,5 @@
 # ~rnaR/wohlstandShinyDashboard
-# Version 3 2022-01-14
+# Version 4 2022-02-08
 ## server.R ##
 library(shiny)
 library(shinydashboard)
@@ -13,13 +13,14 @@ library(ineq)
 message(glue("server start for all sessions, Time: {Sys.time()}"))
 
 # global constants
-anzSpieler <- 100
+anzSpieler <- 1000
 anzWeek <- 53
 randNormMean <- 1.03
 randNormSd <- 0.2
 randAddNormMean <- 0.03
 randAddNormSd <- 0.2
 startKap <- 1.0
+leverage <- 1.0
 obergrenzeProzent <- 50.0
 steuerProzent <- 50.0
 ## end statements server run once
@@ -38,8 +39,10 @@ server <- function(input, output, session) {
       # for-loop over columns
       x <- rnorm(anzSpieler, mean = mw, sd = sd) # multiplikative Zufallszahlen
       xAdd <- rnorm(anzSpieler, mean = addMw, sd = addSd) # additive Zufallszahlen
-      m[, i] <<- m[,i-1] * x + xAdd
-#      m[, i] <<- m[, i - 1] * x # nur mult
+      m[, i] <<- (m[,i-1] * leverage * x) + xAdd + (m[,i-1] * (1.0 - leverage))
+      # newWealth = (oldWealth * leverage * mulFac) + addFac + unused part of oldWealth (= oldWealth *(1.0 - leverage) )
+      # old:     m[, i] <<- m[, i - 1] * x # nur mult
+      # old2: m[, i] <<- m[,i-1] * x + xAdd
     }
     
     for (i in 1:ncol(m)) {
@@ -72,16 +75,16 @@ server <- function(input, output, session) {
     # p*100 percent have L(p)*100 percent of x.
 
     # anschauliche scalare
-    anteilReichsterAnf <<- 1 - lorenzAnf$L[100]
-    anteilReichste10Anf <<- 1 - lorenzAnf$L[91]
-    anteilAermste50Anf <<- lorenzAnf$L[51]
-    anteilAermste10Anf <<- lorenzAnf$L[11]
+    anteilReichsterAnf <<- 1 - lorenzAnf$L[anzSpieler]
+    anteilReichste10Anf <<- 1 - lorenzAnf$L[anzSpieler*0.9 +1]
+    anteilAermste50Anf <<- lorenzAnf$L[anzSpieler*0.5 +1]
+    anteilAermste10Anf <<- lorenzAnf$L[anzSpieler*0.1 +1]
     anteilAermsterAnf <<- lorenzAnf$L[2]
     
-    anteilReichsterEnd <<- 1 - lorenzEnd$L[100]
-    anteilReichste10End <<- 1 - lorenzEnd$L[91]
-    anteilAermste50End <<- lorenzEnd$L[51]
-    anteilAermste10End <<- lorenzEnd$L[11]
+    anteilReichsterEnd <<- 1 - lorenzEnd$L[anzSpieler]
+    anteilReichste10End <<- 1 - lorenzEnd$L[anzSpieler*0.9 +1]
+    anteilAermste50End <<- lorenzEnd$L[anzSpieler*0.5 +1]
+    anteilAermste10End <<- lorenzEnd$L[anzSpieler*0.1 +1]
     anteilAermsterEnd <<- lorenzEnd$L[2]
 
     rechneUmv()    # hier wird umverteilt und alle umv Werte errechnet
@@ -174,10 +177,10 @@ server <- function(input, output, session) {
     giniUmv <<- Gini(nachSteuern, corr = FALSE, na.rm = TRUE)
     # compute lorenz
     lorenzUmv <<- Lc(nachSteuern)
-    anteilReichsterUmv <<- 1 - lorenzUmv$L[100]
-    anteilReichste10Umv <<- 1 - lorenzUmv$L[91]
-    anteilAermste50Umv <<- lorenzUmv$L[51]
-    anteilAermste10Umv <<- lorenzUmv$L[11]
+    anteilReichsterUmv <<- 1 - lorenzUmv$L[anzSpieler]
+    anteilReichste10Umv <<- 1 - lorenzUmv$L[anzSpieler*0.9 +1]
+    anteilAermste50Umv <<- lorenzUmv$L[anzSpieler*0.5 +1]
+    anteilAermste10Umv <<- lorenzUmv$L[anzSpieler*0.1 +1]
     anteilAermsterUmv <<- lorenzUmv$L[2]
 #    message(glue("rechneUmv end, giniUmv: {giniUmv}"))
   }# end rechneUmv
@@ -462,6 +465,22 @@ observeEvent(input$sliderSteuerprozent, {
   ))
 })
 
+observeEvent(input$sliderLeverage, {
+  # Slider Leverage
+  leverage <<- input$sliderLeverage / 100.0
+  message(glue(
+    "observeEvent sliderLeverage: {input$sliderLeverage} end"
+  ))
+})
+
+observeEvent(input$sliderStartVermoeg, {
+  # Slider Startvermoegen
+  startKap <<- input$sliderStartVermoeg
+  message(glue(
+    "observeEvent sliderStartVermoeg: {input$sliderStartVermoeg} end"
+  ))
+})
+
 ## reactive output
   output$outHistAnf <- renderPlot({
     ggplot(mapping=aes(x=rv$firstWeekVermoeg))+
@@ -469,7 +488,7 @@ observeEvent(input$sliderSteuerprozent, {
       scale_x_continuous(labels = scales::dollar) +
       labs(y = "Anzahl (rot) der Personen in VermögensKlasse", x = "Vermögenshöhe pro Klasse", 
            title = "Histogramm der Vermögen zum Jahresbeginn")+ 
-      lims(y = c(0,100))+
+      lims(y = c(0,anzSpieler))+
       stat_bin(bins=10, geom="text", colour="red", size=6.0,
                aes(label=..count..), vjust=-0.2 )
   })
@@ -480,7 +499,7 @@ observeEvent(input$sliderSteuerprozent, {
       scale_x_continuous(labels = scales::dollar) +
       labs(y = "Anzahl (rot) der Personen in VermögensKlasse", x = "Vermögenshöhe pro Klasse", 
            title = "Histogramm der Vermögen zum Jahresende ohne Umverteilung")+ 
-      lims(y = c(0,100))+
+      lims(y = c(0,anzSpieler))+
       stat_bin(bins=10, geom="text", colour="red", size=6.0,
         aes(label=..count..), vjust=-0.2 )
   })
@@ -491,7 +510,7 @@ observeEvent(input$sliderSteuerprozent, {
       scale_x_continuous(labels = scales::dollar) +
       labs(y = "Anzahl (rot) der Personen in VermögensKlasse", x = "Vermögenshöhe pro Klasse", 
            title = "Vermögen zum Jahresende")+ 
-      lims(y = c(0,100))+
+      lims(y = c(0,anzSpieler))+
       stat_bin(bins=10, geom="text", colour="red", size=6.0,
                aes(label=..count..), vjust=-0.2 )
   })
@@ -502,7 +521,7 @@ observeEvent(input$sliderSteuerprozent, {
       scale_x_continuous(labels = scales::dollar) +
       labs(y = "Anzahl (rot) der Personen in VermögensKlasse", x = "Vermögenshöhe pro Klasse", 
            title = "Histogramm der Vermögen nach Umverteilung")+ 
-      lims(y = c(0,100))+
+      lims(y = c(0,anzSpieler))+
       stat_bin(bins=10, geom="text", colour="red", size=6.0,
                aes(label=..count..), vjust=-0.2 )
   })
