@@ -1,5 +1,5 @@
 # ~rnaR/wohlstandShinyDashboard
-# Version 4 2022-02-08
+# Version 6 2023-01-29 ger
 ## ui.R ##
 library(shiny)
 library(shinydashboard)
@@ -41,11 +41,12 @@ ui <- dashboardPage(
           box(
             title = strong("Willkommen"),
             width=8,
-            h2("Warum wollen wir keine Vermögensteuer?"),
-            "Impfen wird ja heute auch von manchen abgelehnt. ", strong(" Die Ursache? Falsche Informationen und Mangel an Aufklärung!"), 
-            br(),"Aber: unterschiedlich zum Corona-Chaos gibt's hier einfach nachvollziehbare Fakten:",
+            h2("Warum werden Reiche immer reicher?"),
+            "Warum nimmt die Ungleichheit ständig zu? Nicht nur, weil manche Reiche ihre Macht schamlos ausnutzen und sich illegal Vorteile verschaffen. Sondern weil Vermögen automatisch bei Wenigen kumuliert, wie du hier praktisch nachvollziehen kannst.", 
+            br(),"Trotzdem unternehmen wir nichts gegen unverdienten Überreichtum. Mangelhaft oder falsch informiert verehren viele Menschen Vermögen als heilig und bewundern überreiche Eliten. Aus vorauseilendem Gehorsam oder durch Bestechung erpressbare Politiker weigern sich, mit vernünftigen Maßnahmen gegenzusteuern.",
+            br(),"Diese Webseite möchte aufklären und befähigt dich, mit interaktiven Simulationen eigene praktische Erfahrungen zu machen:",
             tags$ul(
-              tags$li("Du erkennst an einem praktischen Beispiel, dass Ungleichheit automatisch entsteht,"), 
+              tags$li("Du erkennst an praktischen Beispielen, dass Ungleichheit automatisch entsteht,"), 
               tags$li("Du probierst aus, was wir dagegen unternehmen könnten,"), 
               tags$li("Du verstehst die zugrundeliegenden Ursachen und warum das schwer zu akzeptieren ist.")
             ),
@@ -53,8 +54,8 @@ ui <- dashboardPage(
             br(),"In drei Schritten kannst du Näheres erfahren, allerdings mit steigendem Aufwand:", 
             tags$ol(
               tags$li(tags$b("Einfach:"),em(" Dauer nur 2 Minuten.")," Intuitiv vermutest du, dass sich die Vermögen gerecht verteilen. Überprüfe deine Annahme: Rechts siehst du ein Histogramm. Es dokumentiert, wieviele der 1000 Personen sich nach einem Jahr in welcher Vermögensklasse befinden. Der linkeste Balken und die rote Zahl darüber zeigt an, wieviele Personen sich in der ärmsten Klasse befinden, der rechteste Balken zeigt die Anzahl der Personen, die zur reichsten Klasse gehören. Vergleiche die Zahl der Ärmsten mit den Reichsten. Was fällt dir auf? Hättest du diese Vermögensverteilung erwartet? Vielleicht war das ein Zufall. Drücke links unten auf den grauen Button ", em("Neustart"), " und simuliere ein anderes Jahr. Hat sich die Verteilung wesentlich verändert? Hättest du gerechtere Verteilungen erwartet? Du kannst es beliebig oft versuchen."), 
-              tags$li(tags$b("Fortgeschritten:"),em(" Dauer ca. 15 Minuten.")," Wenn du erkannt hast, dass sich Vermögen automatisch ungleich entwickeln, möchtest du vielleicht ausprobieren, wie du diesen Trend mildern kannst. Eine Möglichkeit wäre Umverteilung durch Besteuerung hoher Vermögen. Lies dir dazu die Menuseite ", em("Anleitung"), " durch und probiere es selber im Menu ", em("Simulation"), " aus. Beurteile die entstehenden Vermögensunterschiede im Menu ", em("Ungleichheit")), 
-              tags$li(tags$b("Professional:"),em(" Dauer etwa 30 Minuten.")," Für uns ist es schwer zu verstehen, warum Ungleichheit automatisch entsteht. Denn das hier Erlebte spricht gegen unsere Intuition, gegen unser Verständnis von Durchschnittsbildung und gegen traditionelle Wirtschaftstheorien. Wenn dich das irritiert und du etwas mehr erfahren möchtest, dann schau dir die Menuseite ", em("Ergodizität"), " näher an und experimentiere mit exponentiellem und additivem Wachstum mit unterschiedlichen Parametern im Menu ", em("Parameter."))
+              tags$li(tags$b("Fortgeschritten:"),em(" Dauer ca. 15 Minuten.")," Wenn du erkannt hast, dass sich Vermögen automatisch ungleich entwickeln, möchtest du vielleicht ausprobieren, wie du diesen Trend mildern kannst. Eine Möglichkeit wäre die Umverteilung durch Besteuerung hoher Vermögen. Lies dir dazu die Menuseite ", em("Anleitung"), " durch und probiere es selber im Menu ", em("Simulation"), " aus. Beurteile die entstehenden Vermögensunterschiede im Menu ", em("Ungleichheit.")), 
+              tags$li(tags$b("Professional:"),em(" Dauer etwa 30 Minuten.")," Für viele Menschen ist es schwer zu verstehen, warum Ungleichheit automatisch entsteht. Denn das hier Erlebte spricht gegen unsere Intuition, gegen unser Verständnis von Durchschnittsbildung und gegen traditionelle Wirtschaftstheorien. Wenn dich das irritiert und du etwas mehr erfahren möchtest, dann schau dir die Menuseite ", em("Ergodizität"), " näher an und experimentiere mit exponentiellem und additivem Wachstum mit unterschiedlichen Parametern im Menu ", em("Parameter."))
             ),
             strong("Wie funktioniert das Ganze?"),
             "Wenn du ",strong("links oben das Symbol mit den drei weißen Balken"), " anklickst, öffnet oder schließt sich links das Menu.",
@@ -79,7 +80,7 @@ ui <- dashboardPage(
           box(
             title = "Tipp",
             width = 4,
-            "Entscheide, wieviel Zeit du investieren möchtest, und führe dann einen oder mehr von den drei Schritten 'Einfach' - 'Professional' links durch. Du kannst nichts ruinieren - experimentiere ganz unverbindlich und mache dir dein eigenes Bild!"
+            "Entscheide, wieviel Zeit du investieren möchtest, und führe dann einen oder mehrere von den drei Schritten ", em("Einfach - Fortgeschritten - Professional"), " links durch. Du kannst dabei gar nichts falsch machen - experimentiere ganz unverbindlich und mache dir dein eigenes Bild!"
           ),
           box(
             title = "Histogramm Verteilung der Vermögen",
@@ -110,27 +111,28 @@ ui <- dashboardPage(
                   " Aber auch wenn wir das hier beiseite lassen, erleben wir trotzdem eine schiefe Verteilung von Vermögen.",
                   br(), br(), strong("Probiere bitte selber, ob du gegen diesen automatischen Trend gegensteuern kannst:"), 
                   br(), "Wähle im linken Menu ", em("Simulation"), " aus. Dann siehst du gleich die Simulation eines Jahres mit drei Histogrammen. ",
-                  br(), "Histogramme geben einen Überblick über Häufigkeiten und stellen hier grafisch dar, wieviele Personen sich in einzelnen Vermögensklassen befinden. Der linkeste Balken zeigt an, wieviele Personen sich in der ärmsten Klasse befinden, der rechteste die Anzahl in der reichsten Klasse.",
-                  br(), "Im linken Histogram siehst du an dem dicken blauen Balken, dass zu Jahresbeginn alle Vermögen identisch in einer Klasse liegen. Das mittlere Histogramm zeigt die Vermögensverteilung am Ende des Jahres ohne Steuern. Im rechten Histogramm siehst du, wie eine mögliche Besteuerung am Jahresende die Verteilung der Vermögen verändern könnte.",
-                  br(), br(), "Links unten im Kasten 'Steuerpolitik' kannst du mit zwei Schiebereglern die Besteuerung der Vermögen selber festlegen.",
-                  "Beide Schieberegler sind auf 50% voreingestellt. Bitte experimentiere mit anderen Werten:",
-                  br(), "Wenn du den ", strong("türkisen Schieberegler"), " nach ", em("rechts"), " verschiebst, vergrößerst du die ", strong("Grenze, ab der Vermögensteuer zu zahlen ist"), ". Ganz rechts bei 100% zahlt niemand Vermögensteuer.",
-                  "Schiebst du den Regler nach ", em("links,"), "verringerst du die Grenze, bis schließlich alle, auch die ärmsten Vermögensteuer zahlen.",
-                  br(), "Wenn du den ", strong("roten Schieberegler"), " nach ", em("rechts"), " verschiebst, vergrößerst du den ", strong("Prozentsatz"), " vom aktuellen Vermögen, der als Vermögensteuer am Jahresende abzuführen ist.",
+                  br(), "Histogramme geben einen Überblick über Häufigkeiten und stellen hier grafisch dar, wieviele Personen sich in einzelnen Vermögensklassen befinden. Der linkeste Balken zeigt an, wieviele Personen sich in der ärmsten Klasse befinden, der rechteste die Anzahl in der reichsten Klasse. Auf der horizontalen Skala unter den Histogrammen erkennst du die ungefähre Höhe der Vermögen in den einzelnen Klassen.",
+                  br(), "Im linken Histogram siehst du an dem dicken blauen Balken, dass zu Beginn des ersten Jahres alle Vermögen identisch in einer Klasse liegen. Das mittlere Histogramm zeigt die Vermögensverteilung am Ende des Jahres ohne Steuern. Im rechten Histogramm siehst du, wie eine mögliche Besteuerung am Jahresende die Verteilung der Vermögen verändern könnte.",
+                  br(), br(), "Links unten im Kasten ", em("Steuerpolitik"), " kannst du mit zwei Schiebereglern die Besteuerung der Vermögen selber festlegen.",
+                  "Bitte experimentiere mit anderen Werten:",
+                  br(), "Wenn du den ", strong("grünen Schieberegler"), " nach ", em("rechts"), " verschiebst, vergrößerst du die ", strong("Grenze, ab der Vermögensteuer zu zahlen ist"), ". Ganz rechts bei 100% zahlt niemand Vermögensteuer.",
+                  "Schiebst du den Regler nach ", em("links,"), "verringerst du die Grenze, bis schließlich alle, auch die Ärmsten, Vermögensteuer zahlen.",
+                  br(), "Wenn du den ", strong("roten Schieberegler"), " nach ", em("rechts"), " verschiebst, vergrößerst du den ", strong("Prozentsatz"), " vom aktuellen steuerpflichtigen Vermögen, der als Vermögensteuer am Jahresende abzuführen ist.",
                   "Schiebst du ihn nach ", em("links,"), "verringerst du den Prozentsatz, bis schließlich gar keine Vermögensteuer abzuführen ist.",
                   br(), "Wenn alle Personen 100% Vermögensteuer zahlen, beginnen alle Personen das nächste Jahr mit gleichen Vermögen (vollständige Umverteilung)."
                 ),
                 box(
                   title = strong("Anleitung zur Umverteilung"),
                   width=6,
-                  "Nehmen wir jetzt einmal an, dass du jegliche Umverteilung ablehnst ", em("(nach dem Motto: 'Leistung muss sich wieder lohnen')"), ". Dann möchtest du diese ", strong("Gleichmacherei verhindern"), ". Mit Begeisterung schiebst du den türkisen Regler rasch ganz nach ",
-                  em("rechts"), ", so dass sicher keine Umverteilung durch Vermögen- oder Erbschaftsteuer stattfinden kann.",
-                  br(), "Zufrieden wirst du jetzt im linken Menu auf den ", em("orangen Button 'weiteres Jahr'"), " drücken und zusehen, wie sich die Vermögen im nächsten Jahr noch ungleicher verteilen. Du musst nur den türkisen Regler immer brav ganz nach rechts schieben.",
-                  " und dann weitere Jahre durch Druck auf den orangen Button simulieren. ",                  
-                  br(), br(), "Über den Menupunkt ", em("Ungleichheit"), " siehst du statistische ", strong("Messgrößen zur Ungleichheit"), " der Vermögensverteilung, Gini-Koeffizient und Lorenzkurve zu Jahrsbeginn, Jahresende und nach einer etwaigen Umverteilung.",
+                  "Nehmen wir vorerst einmal an, dass du jegliche Umverteilung ablehnst ", em("(nach dem neoliberalen Motto: 'Leistung muss sich wieder lohnen')."), 
+                  " Dann möchtest du natürlich jede ", strong("Vermögensteuer verhindern"), ". Mit Begeisterung schiebst du den grünen Regler rasch ganz nach ",
+                  em("rechts,"), " so dass sicher keine Umverteilung stattfinden kann.",
+                  br(), "Zufrieden wirst du jetzt im linken Menu auf den ", em("orangen Button 'weiteres Jahr'"), " drücken und zusehen, wie sich die Vermögen im nächsten Jahr noch ungleicher verteilen. Du musst nur den grünen Schieberegler immer brav ganz nach rechts schieben.",
+                  " und dann weitere Jahre durch Druck auf den orangen Button simulieren. Überlege aber dabei, wie wahrscheinlich es ist, dass gerade du in die Klasse der Reichsten geraten wirst!",                  
+                  br(), br(), "Über den Menupunkt ", em("Ungleichheit"), " siehst du statistische ", strong("Messgrößen zur Ungleichheit"), " der Vermögensverteilung, Gini-Koeffizient und Lorenzkurve zu Jahresbeginn, Jahresende und nach einer etwaigen Umverteilung.",
                   br(), br(), "Über den Menupunkt ", em("Jahresverlauf"), " siehst du die wöchentliche ", strong("Entwicklung des Gesamtvermögens"), " und den Verlauf des minimalen und maximalen Einzelvermögens sowie Durchschnitt und Median aller Vermögen. (Median ist das Vermögen, das genau in der Mitte liegt, wenn man die Vermögen der Größe nach sortiert.)",
                   br(), br(), strong("Gefällt dir diese automatische Tendenz zur Ungleichheit?"), " Vielleicht möchtest du jetzt doch einmal ausprobieren, wie wir mehr Wohlstand für alle durch Umverteilung erreichen könnten?",
-                  br(), strong("Dann riskiere es,"), "und stelle mit beiden Schiebereglern eine andere Steuerpolitik ein und schau dir an, wie die Vermögensverteilung gerechter wird. Damit bremst du die automatisch entstehende Ungleichheit und verteilst die eingehobene Vermögensteuer durch staatliche Sozialleistungen gerecht an alle.",
+                  br(), strong("Dann riskiere es,"), "und stelle mit beiden Schiebereglern eine andere Steuerpolitik ein und schau dir an, ob die Vermögensverteilung gerechter wird. Gelingt es dir, die automatisch entstehende Ungleichheit zu bremsen und die eingehobene Vermögensteuer durch staatliche Sozialleistungen gerecht an alle zu verteilen?",
                   br(), br(), strong("Aber: war die entstehende Ungleichheit nicht nur ein Zufall?"), " Probiere es aus, drücke auf den ",
                   em("grauen Button 'Neustart'"), "im linken Menu für einen neuen Versuch und experimentiere nach Lust und Laune. "
                 )
@@ -157,27 +159,53 @@ ui <- dashboardPage(
                 box(
                   title = "Steuerpolitik",
                   width = 8,
-#                  helpText(" in % des größten Vermögens"),
-                  # set color of left slider bar
-                  setSliderColor(c("#00cccc", "#ff0000"), c(1,2)), #türkis erster, rot zweiter
-                  sliderInput(
-                    "sliderObergrenze",
-                    "Steuergrenze: ab wieviel Prozent vom größten Einzelvermögens ist Vermögensteuer zu entrichten?",
-                    0,
-                    100,
-                    50
+                  setSliderColor(c("#008000", "#ff0000"), c(1, 2)),
+                  #grün erster, rot zweiter
+                  sliderTextInput(
+                    "sliderFreigrenzeProz",
+                    "Steuerfreigrenze: Welcher Prozentanteil der ärmeren Personen mit kleineren Einzelvermögen soll KEINE Steuer zahlen?",
+                    choices = c(
+                      0,
+                      0.5,
+                      1,
+                      2,
+                      10,
+                      20,
+                      30,
+                      40,
+                      50,
+                      60,
+                      70,
+                      80,
+                      90,
+                      95,
+                      96,
+                      97,
+                      98,
+                      99,
+                      99.5,
+                      99.6,
+                      99.7,
+                      99.8,
+                      99.9,
+                      100
+                    ),
+                    selected = 80,
+                    grid = T
                   ),
-                  p("Regler ganz links auf 0 = alle Personen zahlen Steuer, Regler ganz rechts auf 100: keine Person zahlt Steuer."),
-#                  helpText("Steuerprozentsatz"),
+                  "Regler ganz links auf 0 = alle Vermögen sind steuerpflichtig.",
+                  " Regler ganz rechts auf 100 = kein Vermögen wird besteuert.",
+                  br(), "Tipp: Stelle dir alle Vermögen in einer Reihe der Größe nach aufsteigend sortiert vom kleinsten bis zum größten Vermögen vor. Bis zu welcher Position auf dieser Linie von 0 bis 100 sollen die Vermögen steuerfrei bleiben? Nur Vermögen ab dieser Position werden besteuert. Standardmäßig ist 80 voreingestellt, das bedeutet die 80% kleineren Vermögen werden nicht besteuert, die 20% größten Vermögen schon. Beispiel 10 =  nur die kleinsten 10% der Vermögen werden nicht besteuert, Beispiel 99.5 = die kleinsten 99.5 % der Vermögen werden nicht besteuert, somit zahlen nur die größten 0.5% aller Vermögen Steuern.",
+#                  verbatimTextOutput(outputId = "result"),
                   hr(),
                   sliderInput(
                     "sliderSteuerprozent",
-                    "Steuerprozentsatz: Wieviel Prozent ihres Vermögens müssen Personen, deren Vermögen über der Steuergrenze liegt, an Vermögensteuer abführen?",
+                    "Steuerprozentsatz: Wieviel Prozent ihres Vermögens müssen Personen, deren Vermögen über der Steuerfreigrenze liegt, an Vermögensteuer abführen?",
                     0,
                     100,
-                    50
+                    80
                   ),
-                  p("Regler ganz links auf 0 = keine Vermögensteuer, Regler ganz rechts auf 100: das gesamte Vermögen ist abzuführen.")
+                  p("Regler ganz links auf 0 = keine Vermögensteuer, Regler ganz rechts auf 100: der gesamte Vermögensanteil über der Steuerfreigrenze wird umverteilt; voreingestellt: 80")
                 ),
                 box(
                   title = "Kennzahlen",
@@ -247,7 +275,7 @@ tabItem(tabName = "funktTab",
             width=9,
             #                  h2("Wie funktioniert dieses Modell?" ),
             "Beim Neustart erhalten zum Jahresbeginn alle 1000 Personen das gleiche Startvermögen und verändern es jede Woche durch finanzielle Transaktionen.",
-            br(), "Wie wird jede einzelne Transaktion simuliert? Unser Wirtschaftsleben ist stark durch exponentielles Wachstum bestimmt: für kapitalorientierte Transaktionen gilt: ",
+            br(), "Wie wird jede einzelne Transaktion simuliert? Unser Wirtschaftsleben ist stark durch exponentielles Wachstum bestimmt: für alle kapitalorientierten Transaktionen gilt: ",
             br(), code("neues Vermögen = altes Vermögen * multiplikativer Faktor"), ". In der Realität ist der multiplikative Faktor ein Zinsgewinn, Mietertrag oder Investitionsgewinn, mit dem das alte Vermögen multipliziert wird. Jedenfalls hängt hier die Höhe des neuen Vermögens stark von der Höhe des alten Vermögens ab. Im Modell verwenden wir als multiplikativen Faktor normalverteilte Zufallszahlen mit einem voreingestellten Mittelwert = 1,03 und der Standardabweichung = 0,2.",
             br(), "Zusätzlich gibt es auch ein additives Wachstum, das durch Erwerbsarbeit, Pensionen oder Mietzahlungen der kleinen Leute entsteht. Dieses Wachstum hängt nicht von der aktuellen Vermögenshöhe ab. Hier gilt: ",code("neues Vermögen = altes Vermögen + additiver Faktor"), 
             ". Im Modell verwenden wir als additiven Faktor normalverteilte Zufallszahlen mit einem voreingestellten Mittelwert = 0,03 und der Standardabweichung = 0,2.",
@@ -263,18 +291,20 @@ tabItem(tabName = "funktTab",
             br(), "Die ", strong("Lorenz-Kurven"), " zeigen grafisch an, welcher Personenanteil welchen Anteil am Gesamtvermögen hat. Näheres zur Lorenz-Kurve findet du unter: ",
             a(href = "https://de.wikipedia.org/wiki/Lorenz-Kurve", "https://de.wikipedia.org/wiki/Lorenz-Kurve"),
             ". Je stärker die rote Lorenzkurve nach rechts unten durchhängt, desto grösser ist hier die Ungleichheit.",
-            br(),br(), "Du kannst die Ungleichheit durch höhere Vermögensteuern mildern, wenn du den ", em("'türkisen' Schieberegler"), " auf der Menuseite ", em("Simulation"), " weiter nach links bewegst und damit die Vermögensgrenze senken, ab der Steuer fällig wird.",
-            " Oder du schiebst den ", em("'roten' Schieberegler"), " weiter nach rechts, um damit den Prozentsatz der Steuer zu erhöhen.",
-            br(), "Standardmäßig wird der Vermögenshöhe, ab der Steuer fällig wird, auf 50% des größten Einzelvermögens gesetzt und der Steuersatz auf 50%.",
+            br(),br(), "Du kannst die Ungleichheit durch höhere Vermögensteuern mildern und zwar durch Erhöhen des Steuerprozentsatzes oder Senken der Steuerfreigrenze. Diese senkst du, indem du den ", em("grünen Schieberegler"), " auf der Menuseite ", em("Simulation"), " weiter nach links bewegst.",
+            " Die Steuerfreigrenze, also der Grenzbetrag, ab dem Vermögensteuer zu zahlen ist, stellst du analog zur Lorenz-Kurve ein. Stelle dir dazu alle Vermögen in einer Reihe der Größe nach aufsteigend sortiert vom kleinsten bis zum größten Vermögen vor. Bis zu welcher Position auf dieser Linie von 0 bis 100 sollen die Vermögen steuerfrei bleiben? Nur Vermögen ab dieser Position werden besteuert.",
+            " Beispiel 10 =  nur die kleinsten 10% der Vermögen werden nicht besteuert, Beispiel 99.5 = die kleinsten 99.5 % der Vermögen werden nicht besteuert, somit zahlen nur die größten 0.5% aller Vermögen Steuern.",
+            " Standardmäßig ist die Vermögensgrenze, ab der Steuer fällig wird, so eingestellt, dass nur die 20% größten Einzelvermögen Steuer zahlen und die 80% kleinsten Einzelvermögen unbesteuert bleiben.",
+            br(),"Mit dem ", em("roten Schieberegler"), " stellst du den Prozentsatz ein, mit dem der Vermögensanteil, der über der Steuerfreigrenze liegt, besteuert werden soll. Dieser Steuersatz ist standardmäßig auf 80% gesetzt.",
             br(), "Die zum Jahresende eingehobene Vermögensteuer wird (in der Form von staatlichen Sozialleistungen) gerecht auf alle Personen verteilt, also auch auf die Reichen.",
-            br(), "Wenn du auf den orangen Button ", em("'weiteres Jahr'"), " drückst, werden alle Vermögen vom Jahresende nach Umverteilung auf den Beginn eines weiteren Jahres übertragen und dieses weitere Jahr wie oben mit neuen Zufallszahlen simuliert und angezeigt. ",
+            br(), "Wenn du auf den ", em("orangen Button 'weiteres Jahr'"), " drückst, werden alle Vermögen vom Jahresende nach Umverteilung auf den Beginn eines weiteren Jahres übertragen und dieses weitere Jahr wie oben mit neuen Zufallszahlen simuliert und angezeigt. ",
             br(), "So kannst du den Ablauf mehrerer Jahre - egal ob mit hohen, geringen oder gar keinen Vermögensteuern - simulieren und Höhe und Verteilung der Vermögen beurteilen. ",
             br(), "Auf der Menuseite ", em("Jahresverlauf"), " siehst du die Entwicklung des Gesamtvermögens aller Personen in diesem Jahr und welche Auswirkungen die Umverteilung haben kann."
           ),
           box(
             title = "Fragen",
             width = 3,
-            br(), strong("Warum weisen die Werte zum Jahresende auf größere Ungleichheit hin?"),
+            br(), strong("Warum weisen die Werte zum Jahresende auf größere Ungleichheit hin?"), " Handelt es sich dabei um einen einmaligen zufälligen Effekt? Was kannst du gegen diesen Effekt tun? ",
             br(), br(), strong("Wie gefällt dir der Unterschied mit / ohne Umverteilung?"), " Umverteilen hat ja beängstigende Namen: Vermögensteuer, Erbschaftsteuer. Aber keine Angst, richtig angewendet verliert dabei mittelfristig niemand, auch nicht die Reichen. Kooperative Umverteilung bewirkt Vermögenszuwachs für alle.",
             br(), br(), strong("Hast du ausprobiert, was bei zunehmender Umverteilung mit dem Gesamtvermögen geschieht?"), 
             br(), " Wahrscheinlich profitieren die Ärmeren.",
@@ -406,7 +436,7 @@ tabItem(tabName = "impressumTab",
             hr(),
             br(), h4("Netter Song, zur Einstimmung ins Thema:"),
             "Everybody Knows, Leonard Cohen, 1988 (to play while viewing this website)",
-            br(), a(href = "https://www.youtube.com/watch?v=Lin-a2lTelg", "https://www.youtube.com/watch?v=Lin-a2lTelg", target="_blank"),
+            br(), a(href = "https://www.youtube.com/watch?v=xu8u9ZbCJgQ", "https://www.youtube.com/watch?v=xu8u9ZbCJgQ", target="_blank"),
             br(), br(), "Everybody knows that the dice are loaded",
             br(), "    Everybody rolls with their fingers crossed",
             br(), "    Everybody knows the war is over",
@@ -429,7 +459,7 @@ tabItem(tabName = "impressumTab",
             br(), "Und wirklich erlebt unser Gestrandeter den Frieden, die Ruhe und Ausgeglichenheit der Inselbewohner als Beweis für die mächtige Wirksamkeit dieser seltsamen Umverteilung. Er denkt: 'Das ist ja wirklich wie auf einer Insel der Seeligen hier, ganz anders als in meinem Heimatland, wo Gier, Hektik und Mißgunst herschen.'",
             "Falls er durch glückliche Fügung jemals wieder in sein Heimatland zurückkehren könnte, dann würde er seinen Volksvertretern unbedingt eine ähnliche Vorgangsweise empfehlen.",
             br(), "Nach einigen glücklichen Jahren, die er noch auf der Insel der Seeligen verbringen darf, erscheint eines Tages ein silbernes Boot am Horizont, das ihn schließlich an Bord nimmt und nach langer Fahrt in sein Heimatland zurück bringt.",
-            br(), "Einerseits ist er jetzt froh, wieder zu Hause zu sein, andereseits ist er entsetzt, wie sich die Lage in seinem Land verschlechtert hat: Viele Leute sind völlig verarmt, auch seine Brüder, Schwestern und Freunde. Er wundert sich auch über hohe Mauern mit vielen Wächtern an Orten, mit denen sich wenige Reiche aus Angst vor den Armen schützen wollen und die vielen schwer bewaffneten Polizisten, die ängstlich die jammernden Armen von Verzweiflungstaten abhalten müssen.",
+            br(), "Einerseits ist er jetzt froh, wieder zu Hause zu sein, andererseits ist er entsetzt, wie sich die Lage in seinem Land verschlechtert hat: Viele Leute sind völlig verarmt, auch seine Brüder, Schwestern und Freunde. Er wundert sich auch über hohe Mauern mit vielen Wächtern an Orten, mit denen sich wenige Reiche aus Angst vor den Armen schützen wollen und die vielen schwer bewaffneten Polizisten, die ängstlich die jammernden Armen von Verzweiflungstaten abhalten müssen.",
             br(), "So sucht er um Audienz bei seinen Volksvertretern an. Als er endlich vorgelassen wird, berichtet er ihnen über seine Erlebnisse auf der Insel der Seeligen und schlägt ihnen diese regelmäßige Umverteilung zur Wiedererlangung des inneren Friedens vor. Doch da brechen die Volksvertreter in ein verzweifeltes Lachen aus.",
             "Sie sagen, dass so etwas bei ihnen gänzlich unmöglich sei. Das von ihnen vertretene Volk bewundere die Reichen und verehre sie besonders intensiv. Viele Arme glaubten in ihrer Verblendung, Vermögen sei sakrosankt. Daher dürfe man niemandem etwas wegnehmen. So sehr wünschen auch die Armen, den Reichen ähnlich zu sein, dass sie jegliche Umverteilung als undenkbar und sogar sündhaft ablehnen.",
             br(), "Dabei geraten immer mehr Menschen in bittere Armut. Manche von diesen Unglücklichen versuchen mit Gewalt, anderen ihr Eigentum zu entreissen. Leider sind das meist ähnlich Arme wie sie selbst, da die Reichen in ihren sicheren Schlössern hinter den hohen Mauern für sie unerreichbar sind. Aber die Reichen werden immer gieriger. Sie versuchen durch unredliche Machenschaften, noch mehr Vermögen anzuhäufen.",
@@ -440,7 +470,8 @@ tabItem(tabName = "impressumTab",
         ))
     )
   ),
+message(glue("end ui")),
 footer = dashboardFooter(left = "Rupert Nagler",
-                         right = "(c) Information Design Institute, 2022")
+                         right = "(c) Information Design Institute, 2023")
 )
-# message(glue("end ui")) wenn das activ, dann wird ui nicht gefunden
+#message(glue("end ui out")) wenn das activ, dann wird ui nicht gefunden
